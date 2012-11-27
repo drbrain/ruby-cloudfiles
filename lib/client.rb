@@ -156,9 +156,14 @@ public
       [parsed, conn]
     elsif parsed.scheme == 'https'
       require 'net/https'
+
+      store = OpenSSL::X509::Store.new
+      store.set_default_paths
+
       conn = Net::HTTP::Proxy(proxy_host, proxy_port).new(parsed.host, parsed.port)
       conn.use_ssl = true
-      conn.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      conn.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      conn.cert_store = store
       [parsed, conn]
     else
       raise ClientException.new(

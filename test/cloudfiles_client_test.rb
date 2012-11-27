@@ -63,7 +63,8 @@ class SwiftClientTest < Test::Unit::TestCase
     assert_equal 443, conn.port
     assert_equal Net::HTTP, conn.class
     assert_equal true, conn.use_ssl?
-    assert_equal OpenSSL::SSL::VERIFY_NONE, conn.verify_mode
+    assert_equal OpenSSL::SSL::VERIFY_PEER, conn.verify_mode
+    refute_nil   conn.cert_store
   end
   
   def test_http_connection_with_bad_scheme
